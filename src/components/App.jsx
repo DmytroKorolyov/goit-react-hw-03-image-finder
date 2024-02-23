@@ -1,10 +1,10 @@
 import s from './styles/styles.module.css'
 import React, { Component } from 'react';
-import Searchbar from './Searchbar/Searchbar';
-import ImageGallery from './ImageGallery/ImageGallery';
 import { fetchImagesWithQuery } from '../api';
-import Modal from './Modal/Modal';
+import ImageGallery from './ImageGallery/ImageGallery';
+import Searchbar from './Searchbar/Searchbar';
 import Button from './Button/Button';
+import Modal from './Modal/Modal';
 import { Loader } from './Loader/Loader';
 
 export class App extends Component {
@@ -17,21 +17,25 @@ export class App extends Component {
     searchQuery: '',
   };
 
+
+
+componentDidMount() {
+    const { searchQuery } = this.state;
+    if (searchQuery) {
+      this.fetchImages();
+    }
+  }
+
   componentDidUpdate(prevProps, prevState) {
     if (prevState.searchQuery !== this.state.searchQuery) {
       this.fetchImages();
     }
   }
 
-  handleSetQuery = searchQuery => {
-    this.setState({ searchQuery });
-  };
-
   fetchImages = async () => {
     const { searchQuery } = this.state;
-    this.setState({ images: [] });
+    this.setState({ images: [], isLoading: true });
     try {
-      this.setState({ isLoading: true });
       const images = await fetchImagesWithQuery(searchQuery, 1);
       this.setState({ images, page: 1 });
     } catch (error) {
@@ -41,11 +45,15 @@ export class App extends Component {
     }
   };
 
+  handleSetQuery = searchQuery => {
+    this.setState({ searchQuery });
+  };
+
   handleLoadMoreImages = async () => {
     const { searchQuery, page } = this.state;
     const nextPage = page + 1;
+    this.setState({ isLoading: true });
     try {
-      this.setState({ isLoading: true });
       const newImages = await fetchImagesWithQuery(searchQuery, nextPage);
       this.setState(prevState => ({
         images: [...prevState.images, ...newImages],
@@ -66,8 +74,7 @@ export class App extends Component {
   handleCloseModal = () => {
     document.body.style.overflow = 'auto';
     this.setState({ showModal: false, largeImageURL: '' });
-  };
-
+};
   render() {
     const { showModal, largeImageURL, images, isLoading } = this.state;
     return (
@@ -88,6 +95,43 @@ export class App extends Component {
     );
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,6 +1,5 @@
 import React from 'react';
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
-import { nanoid } from 'nanoid';
 import s from '../styles/styles.module.css'
 
 const ImageGallery = ({ images, onItemClick }) => {
@@ -8,14 +7,13 @@ const ImageGallery = ({ images, onItemClick }) => {
     <ul className={s.gallery}>
       {images.map(image => (
         <ImageGalleryItem
-          key={nanoid()}
-          image={image}
-          onItemClick={onItemClick}
+          key={image.id} image={image} onItemClick={onItemClick}
         />
       ))}
     </ul>
   );
 };
+
 
 export default ImageGallery;
 
